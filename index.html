@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Le Mie Dispense</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .upload-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .upload-section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        .upload-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="file"] {
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input[type="text"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .upload-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .upload-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .upload-btn:active {
+            transform: translateY(0);
+        }
+
+        .dispense-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .dispense-section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        .dispense-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .dispensa-item {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .dispensa-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .dispensa-info {
+            flex: 1;
+        }
+
+        .dispensa-info h3 {
+            color: #333;
+            margin-bottom: 5px;
+            font-size: 1.2em;
+        }
+
+        .dispensa-info p {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .dispensa-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .download-btn {
+            background: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            transition: background 0.3s;
+        }
+
+        .download-btn:hover {
+            background: #218838;
+        }
+
+        .delete-btn {
+            background: #dc3545;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .delete-btn:hover {
+            background: #c82333;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+
+        .empty-state svg {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 20px;
+            opacity: 0.3;
+        }
+
+        .message {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        @media (max-width: 600px) {
+            .dispensa-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .dispensa-actions {
+                width: 100%;
+                justify-content: flex-end;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📚 Le Mie Dispense</h1>
+            <p>Carica e gestisci i tuoi documenti PDF</p>
+        </div>
+
+        <div class="upload-section">
+            <h2>📤 Carica una nuova dispensa</h2>
+            <div id="message"></div>
+            <form class="upload-form" id="uploadForm">
+                <div class="form-group">
+                    <label for="titolo">Titolo della dispensa:</label>
+                    <input type="text" id="titolo" placeholder="es. Matematica - Capitolo 1" required>
+                </div>
+                <div class="form-group">
+                    <label for="file">Seleziona file PDF:</label>
+                    <input type="file" id="file" accept=".pdf" required>
+                </div>
+                <button type="submit" class="upload-btn">Carica Dispensa</button>
+            </form>
+        </div>
+
+        <div class="dispense-section">
+            <h2>📖 Le tue dispense</h2>
+            <div id="dispenseList" class="dispense-list"></div>
+        </div>
+    </div>
+
+    <script>
+        let dispense = [];
+
+        function mostraMessaggio(testo, tipo) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.className = `message ${tipo}`;
+            messageDiv.textContent = testo;
+            setTimeout(() => {
+                messageDiv.className = '';
+                messageDiv.textContent = '';
+            }, 3000);
+        }
+
+        function caricaDispense() {
+            const salvate = localStorage.getItem('dispense');
+            if (salvate) {
+                dispense = JSON.parse(salvate);
+            }
+            renderizzaDispense();
+        }
+
+        function salvaDispense() {
+            localStorage.setItem('dispense', JSON.stringify(dispense));
+        }
+
+        function renderizzaDispense() {
+            const lista = document.getElementById('dispenseList');
+            
+            if (dispense.length === 0) {
+                lista.innerHTML = `
+                    <div class="empty-state">
+                        <svg fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9 2a2 2 0 00-2 2v8a2 2 0 002 2h6a2 2 0 002-2V6.414A2 2 0 0016.414 5L14 2.586A2 2 0 0012.586 2H9z"></path>
+                            <path d="M3 8a2 2 0 012-2v10h8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"></path>
+                        </svg>
+                        <p>Nessuna dispensa caricata ancora.<br>Inizia caricando il tuo primo documento!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            lista.innerHTML = dispense.map((dispensa, index) => `
+                <div class="dispensa-item">
+                    <div class="dispensa-info">
+                        <h3>📄 ${dispensa.titolo}</h3>
+                        <p>Caricata il ${dispensa.data}</p>
+                    </div>
+                    <div class="dispensa-actions">
+                        <a href="${dispensa.file}" download="${dispensa.titolo}.pdf" class="download-btn">
+                            ⬇️ Scarica
+                        </a>
+                        <button class="delete-btn" onclick="eliminaDispensa(${index})">
+                            🗑️ Elimina
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function eliminaDispensa(index) {
+            if (confirm('Sei sicuro di voler eliminare questa dispensa?')) {
+                dispense.splice(index, 1);
+                salvaDispense();
+                renderizzaDispense();
+                mostraMessaggio('Dispensa eliminata con successo!', 'success');
+            }
+        }
+
+        document.getElementById('uploadForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const titolo = document.getElementById('titolo').value;
+            const fileInput = document.getElementById('file');
+            const file = fileInput.files[0];
+
+            if (!file) {
+                mostraMessaggio('Seleziona un file PDF', 'error');
+                return;
+            }
+
+            if (file.type !== 'application/pdf') {
+                mostraMessaggio('Il file deve essere in formato PDF', 'error');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const nuovaDispensa = {
+                    titolo: titolo,
+                    file: e.target.result,
+                    data: new Date().toLocaleDateString('it-IT')
+                };
+
+                dispense.unshift(nuovaDispensa);
+                salvaDispense();
+                renderizzaDispense();
+                
+                document.getElementById('uploadForm').reset();
+                mostraMessaggio('Dispensa caricata con successo!', 'success');
+            };
+
+            reader.readAsDataURL(file);
+        });
+
+        caricaDispense();
+    </script>
+</body>
+</html>
